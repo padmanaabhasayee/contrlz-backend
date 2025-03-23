@@ -12,8 +12,11 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/devices")
+@CrossOrigin(origins = "http://localhost:3000")
 public class DeviceController {
 
+    @Autowired
+    private WebSocketController webSocketController; // Inject WebSocket Controller
     private final DeviceRepository deviceRepository;
     private final DeviceService deviceService;
 
@@ -35,15 +38,30 @@ public class DeviceController {
 
     @PostMapping("/addDevice")
     public Device addDevice(@RequestBody Device device) {
-        return deviceRepository.save(device);
+        Device savedDevice = deviceRepository.save(device);
+
+        // Notify frontend about the new device added
+        webSocketController.sendDevicesUpdate();
+        return savedDevice;
+    }
+    @PatchMapping("/update/{deviceId}")
+    public void updateDevice(@PathVariable String deviceId,
+                               @RequestBody Device updatedDevice) {
+        deviceService.updateDevice(deviceId, updatedDevice);
     }
 
-    @PutMapping("/{deviceId}")
+    @PatchMapping("/{deviceId}")
     public void updateDeviceStatus(@PathVariable String deviceId,
                                    @RequestParam boolean status,
-                                   @RequestParam String updatedBy) {
+                                   @RequestParam String updatedBy) throws Exception {
         deviceService.toggleDevice(deviceId, status, updatedBy);
     }
+
+    @DeleteMapping("/{deviceId}")
+    public void deleteDevice(@PathVariable String deviceId) {
+        deviceService.deleteDevice(deviceId);
+    }
+
 
     @GetMapping("/recent-activity")
     public List<DeviceLog> getRecentActivity(@RequestParam(defaultValue = "10") int limit) {

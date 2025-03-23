@@ -21,7 +21,7 @@ public class AppUser implements UserDetails {
     private String id;
     private String username;
     private String password;
-    private String role; // e.g., "ADMIN", "USER"
+    private String role = "USER"; // e.g., "ADMIN", "USER"
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(() -> role);

@@ -10,9 +10,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DeviceLogRepository extends MongoRepository<DeviceLog, String> {
-    List<DeviceLog> findByDeviceIdAndStartTimeBetween(String deviceId, LocalDateTime start, LocalDateTime end);
-    Optional<DeviceLog> findTopByDeviceIdOrderByStartTimeDesc(String deviceId);
+    Optional<DeviceLog> findTopByDevice_deviceIdOrderByStartTimeDesc(String deviceId);
 
     @Query(value = "{}", sort = "{startTime: -1}") // Fetch logs sorted by latest first
     List<DeviceLog> findTopNLogsSortedByTime(Pageable pageable);
+
+    void deleteByDevice_deviceId(String deviceId);
 }
