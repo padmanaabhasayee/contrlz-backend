@@ -20,7 +20,8 @@ public class AppUser implements UserDetails {
     @Id
     private String id;
     private String username;
-    private String password;
+    private String email = "a@b.c";
+    private String password = "";
     private String role = "USER"; // e.g., "ADMIN", "USER"
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

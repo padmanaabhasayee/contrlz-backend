@@ -1,6 +1,8 @@
 package com.contrlz.contrlz_backend.model;
 
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -19,12 +21,7 @@ public class DeviceLog {
     private String id;
     @DBRef
     private Device device;
-    private String turnedOnBy;
-    private String turnedOffBy;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
-
-    public Duration getDuration() {
-        return (startTime != null && endTime != null) ? Duration.between(startTime, endTime) : null;
-    }
+    private String event; // ON or OFF
+    private String eventBy; // done by who
+    private LocalDateTime eventTime; // when is it done
 }

@@ -22,6 +22,7 @@ public class Device {
     private String deviceId; // Unique ID
     private String deviceType; // Fan, Light, etc.
     private String deviceLocation;
+    private String deviceMac = "";
     private boolean status; // ON = true, OFF = false
     private LocalDateTime lastUpdated; // Last updated timestamp
 
