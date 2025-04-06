@@ -100,4 +100,10 @@ public class DeviceController {
         List<DeviceLog> logs = deviceService.getLogs(startDate, endDate, deviceIds);
         return ResponseEntity.ok(logs);
     }
+
+    @PostMapping("/setLogs")
+    public void setDeviceLogs(@RequestBody List<DeviceLog> request){
+        deviceService.setLogs(request);
+        return;
+    }
 }

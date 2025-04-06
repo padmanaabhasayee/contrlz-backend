@@ -173,7 +173,16 @@ public class UserService implements UserDetailsService {
     }
 
     public List<AppUser> bulkCreateUsers(List<AppUser> users){
-        List<AppUser> savedUsers = userRepository.saveAll(users);
+        List<AppUser> processedUsers = new ArrayList<>();
+
+        for (AppUser user : users) {
+            if (user.getPassword() == null || user.getPassword().isEmpty()) {
+                user.setPassword(passwordEncoder.encode("omsrisairam"));
+            }
+            processedUsers.add(user);
+        }
+
+        List<AppUser> savedUsers = userRepository.saveAll(processedUsers);
         webSocketController.sendUsersUpdate();
         return savedUsers;
     }

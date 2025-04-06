@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -34,7 +35,7 @@ public class DeviceService {
         device.setStatus(status);
         deviceRepository.save(device);
 
-        String topic = "contrlz/devices" + device.getDeviceMac();
+        String topic = "contrlz/devices/" + device.getDeviceMac();
         String message = status ? "ON" : "OFF";
         mqttService.publishMessage(topic, message);
 
@@ -136,5 +137,10 @@ public class DeviceService {
         }
 
         return logs;
+    }
+
+    public void setLogs(List<DeviceLog> request) {
+        deviceLogRepository.saveAll(request);
+        webSocketController.sendRecentActivity();
     }
 }
